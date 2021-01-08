@@ -18,3 +18,8 @@ dependencies {
 test {
     useTestNG()
 }
+task regression(type: Test){
+    useTestNG{
+        suites 'src/test/resources/testng.xml'
+    }
+}

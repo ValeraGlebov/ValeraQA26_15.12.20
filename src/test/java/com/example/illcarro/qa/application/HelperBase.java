@@ -1,8 +1,11 @@
 package com.example.illcarro.qa.application;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import com.google.common.io.Files;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+
+import java.io.File;
+import java.io.IOException;
+
 public class HelperBase {
     public HelperBase(WebDriver wd) {
         this.wd = wd;
@@ -46,5 +49,14 @@ public class HelperBase {
     }
     public void clickYallaButton() {
         wd.findElement(By.cssSelector("[type='submit']")).click();
+    }
+    public void takeScreenshot(String pathToFile){
+        File tmp = ((TakesScreenshot) wd).getScreenshotAs(OutputType.FILE);
+        File screenshot = new File (pathToFile);
+        try {
+            Files.copy(tmp, screenshot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

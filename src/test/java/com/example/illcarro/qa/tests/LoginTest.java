@@ -15,6 +15,7 @@ public class LoginTest extends TestBase {
     }
     @Test
     public void testLogin() throws InterruptedException {
+        logger.info("\n User name is: cmex3431608881578643@gmail.com \n User Password is: Demo2015!");
         app.getUser().clickLogInBtn();
         //app.getUser().fillLoginForm("cmex3431608881578643@gmail.com", "Demo2015!");
         app.getUser().fillLoginForm(new User()
@@ -24,5 +25,10 @@ public class LoginTest extends TestBase {
         app.getUser().clickYallaButton();
         app.getUser().pause(2000);
         Assert.assertTrue(app.getUser().isUserLoggedIn());
+    logger.info("Test Passed");
+    String screenshot = "/src/test/screenshots/screenshot- " + System.currentTimeMillis() + ".png";
+
+    app.getUser().takeScreenshot(screenshot);
+    logger.info("Screenshot created: " + screenshot);
     }
 }

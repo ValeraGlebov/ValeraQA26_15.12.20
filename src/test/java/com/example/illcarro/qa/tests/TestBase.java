@@ -22,7 +22,7 @@ public class TestBase {
     }
     @AfterMethod (alwaysRun = true)
     public void stopLogger(Method m){
-        logger.info("Stop test " + m.getName());
+        logger.info("Stop test " + m.getName() + "\n************************************************");
     }
     @AfterSuite()
     public void tearDown(){

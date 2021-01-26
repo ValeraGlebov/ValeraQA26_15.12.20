@@ -5,6 +5,11 @@ import org.testng.annotations.Test;
 public class CarCreationTests extends TestBase{
     @Test
     public void testCarCreation() throws InterruptedException{
+        if(!app.getUser().isUserLoggedIn()){
+            app.getUser().logIn(app.setEmail(), app.setPassword());
+            //cmex3431608881578643@gmail.com --- Demo2015!
+        }
+        System.out.println("started testCarCreation");
         app.getCarHelper().iniAddingNewCar();
         Assert.assertTrue(app.getCarHelper().isCarCreationFormPresent());
 

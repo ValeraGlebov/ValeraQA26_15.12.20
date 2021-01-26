@@ -10,11 +10,11 @@ public class UserHelper extends HelperBase {
         super(wd);
     }
 
-    public void logIn() throws InterruptedException {
+    public void logIn(String email, String password) throws InterruptedException {
         clickByCss("[href='/login']");
         fillLoginForm(new User()
-                .withEmail("cmex3431608881578643@gmail.com")
-                .withPassword("Demo2015!"));
+                .withEmail(email) //"cmex3431608881578643@gmail.com"
+                .withPassword(password));
         pause(2000);
         clickByCss("[type=submit]");
         pause(2000);

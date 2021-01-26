@@ -1,5 +1,4 @@
 package com.example.illcarro.qa.application;
-
 import com.google.common.io.Files;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -10,17 +9,21 @@ import org.openqa.selenium.support.events.AbstractWebDriverEventListener;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class ApplicationManager {
+    Properties properties;
     static EventFiringWebDriver wd;
     UserHelper user;
     CarHelper carHelper;
     String browser;
     Logger logger = LoggerFactory.getLogger(ApplicationManager.class);
+
     public static class MyListener extends AbstractWebDriverEventListener{
 
         HelperBase helperBase = new HelperBase(wd);
@@ -42,7 +45,6 @@ public class ApplicationManager {
 
         @Override
         public void onException(Throwable throwable, WebDriver wd) {
-            //System.out.println(throwable);
             logger.error(throwable.toString());
             String pathToScreenshot = "src/test/screenshots" + System.currentTimeMillis() + ".png";
             helperBase.takeScreenshot(pathToScreenshot);
@@ -62,8 +64,12 @@ public class ApplicationManager {
 
     public ApplicationManager(String browser) {
         this.browser = browser;
+        properties = new Properties();
     }
-    public void start() {
+    public void start() throws IOException {
+        String target  = System.getProperty("target","local");
+        properties.load(new FileReader(new File(String.format("src/test/resources/%s.properties",target))));
+
         if(browser.equals(BrowserType.CHROME)){
             wd = new EventFiringWebDriver(new ChromeDriver());
         }else if(browser.equals(BrowserType.FIREFOX)){
@@ -72,12 +78,18 @@ public class ApplicationManager {
             wd = new EventFiringWebDriver(new EdgeDriver());
         }
         wd.register(new MyListener());
-        wd.navigate().to("https://ilcarro-dev-v1.firebaseapp.com/");
+        wd.navigate().to(properties.getProperty("web.baseURL"));//"https://ilcarro-dev-v1.firebaseapp.com/");
         logger.info("\n Opened site: " + wd.getCurrentUrl());
         wd.manage().window().maximize();
         wd.manage().timeouts().implicitlyWait(4, TimeUnit.SECONDS);
         user = new UserHelper(wd);
         carHelper = new CarHelper(wd);
+    }
+    public  String setEmail(){
+        return properties.getProperty("web.email");
+    }
+    public  String setPassword(){
+        return properties.getProperty("web.password");
     }
 
     public void stop() {
